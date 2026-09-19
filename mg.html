@@ -1,0 +1,145 @@
+#include<iostream>
+#include<cstdio>
+#include<cstdlib>
+#include<conio.h>
+#include <windows.h>
+char migong[12][17][60] = {
+{},
+{
+"+------------------------------------------------+",
+"|P   ########################                    |",
+"|###      ##    ##         ## ################## |",
+"|## # ### ## ## ## ####### #  #                  |",
+"|#### ### ##### ## #       # ## #################|",
+"|#### ###       ## # ####### ##                  |",
+"|#### ############ #         ################### |",
+"|#### ############ ###########                   |",
+"|####                          ##################|",
+"|#################### ###########################|",
+"|#################### ###########################|",
+"|###################   ##########################|",
+"|###################   ##########################|",
+"|###################   ##########################|",
+"+------------------------------------------------+"
+},
+{
+"##################################################",
+"#P                                               #",
+"# # # # #### ################################### #",
+"# # # ###    #                                   #",
+"# ### ### #### ################### ###############",
+"# #       #### #                   #             #",
+"# #   ## ##### # ################### ########### #",
+"# ###### ##### # ################### ########### #",
+"#              # ################### ########### #",
+"################ ############################### #",
+"#                                                #",
+"##################################################",
+"##################################################",
+"##################################################",
+"##################################################"
+}
+};
+// 12 21
+struct node{
+	int x;
+	int y;
+};
+struct node _start[12];
+struct node _end;
+struct node _now;
+char* buf;
+void setup(){
+	system("title 迷宫2.0");
+	std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    buf = new char[16 * 1024];
+	setvbuf(stdout, buf, _IOFBF, 16 * 1024 * 1024);
+	_start[1].x = 12;
+	_start[1].y = 21;
+	_start[2].x = 10;
+	_start[2].y = 1;
+	_end.x = 1;
+	_end.y = 1;
+	return ;
+}
+using namespace std;
+
+void print(int n,int x,int y);
+int main(void){
+	HWND hwnd =	GetConsoleWindow();
+	setup();
+	cout << "欢迎使用迷宫2.0.0\n请输入关卡号(1-2):" << flush;
+	int n;
+	cin >> n;
+	while(n<=0||n>2){
+		cout << "错误!请重新输入(1-2):" << flush;
+		scanf("%d",&n);
+	}
+	_n:
+	system("mode con cols=15 lines=10");
+	system("cls");
+	_now.x = _start[n].x;
+	_now.y = _start[n].y;
+	do{
+		print(n,_now.x,_now.y);
+		int c;
+		c = _getch();
+		// 224 72,80,75,77
+		switch(c){
+			case 'w':_now.x--;if(_now.x>0&&_now.x<15&&_now.y>0&&_now.y<50){if(migong[n][_now.x][_now.y]==' '||migong[n][_now.x][_now.y]=='P')continue;else{_now.x++;break;}}else{_now.x++;break;}break;
+			case 's':_now.x++;if(_now.x>0&&_now.x<15&&_now.y>0&&_now.y<50){if(migong[n][_now.x][_now.y]==' '||migong[n][_now.x][_now.y]=='P')continue;else{_now.x--;break;}}else{_now.x--;break;}break;
+			case 'a':_now.y--;if(_now.x>0&&_now.x<15&&_now.y>0&&_now.y<50){if(migong[n][_now.x][_now.y]==' '||migong[n][_now.x][_now.y]=='P')continue;else{_now.y++;break;}}else{_now.y++;break;}break;
+			case 'd':_now.y++;if(_now.x>0&&_now.x<15&&_now.y>0&&_now.y<50){if(migong[n][_now.x][_now.y]==' '||migong[n][_now.x][_now.y]=='P')continue;else{_now.y--;break;}}else{_now.y--;break;}break;
+			case 224:
+				{
+					int s = _getch();
+					switch(s)
+					{
+						case 72:_now.x--;if(_now.x>0&&_now.x<15&&_now.y>0&&_now.y<50){if(migong[n][_now.x][_now.y]==' '||migong[n][_now.x][_now.y]=='P')continue;else{_now.x++;break;}}else{_now.x++;break;}break;
+						case 80:_now.x++;if(_now.x>0&&_now.x<15&&_now.y>0&&_now.y<50){if(migong[n][_now.x][_now.y]==' '||migong[n][_now.x][_now.y]=='P')continue;else{_now.x--;break;}}else{_now.x--;break;}break;
+						case 75:_now.y--;if(_now.x>0&&_now.x<15&&_now.y>0&&_now.y<50){if(migong[n][_now.x][_now.y]==' '||migong[n][_now.x][_now.y]=='P')continue;else{_now.y++;break;}}else{_now.y++;break;}break;
+						case 77:_now.y++;if(_now.x>0&&_now.x<15&&_now.y>0&&_now.y<50){if(migong[n][_now.x][_now.y]==' '||migong[n][_now.x][_now.y]=='P')continue;else{_now.y--;break;}}else{_now.y--;break;}break;
+						default:break;
+					}
+					break;
+				}
+			default:break;
+		}
+	}while(!(_now.x==_end.x && _now.y==_end.y));
+	system("cls");
+	if(n == 2) return 0;
+	int yn = MessageBox(hwnd,"迷宫2.0","继续?",MB_YESNO);
+	if(yn == IDYES)
+	{
+		n++;
+		goto _n;
+	}
+	return 0;
+}
+void print(int n,int x,int y)
+{
+	system("cls");
+	for(int i = -2 ; i < 3 ; i ++)
+	{
+		for(int j = -2 ; j < 3 ; j ++)
+		{
+			if(x + i == 1 && y + i == 1)
+			{
+				cout << "P";
+			}
+			else if(i == 0 && j == 0)
+			{
+				cout << "I";
+			}
+			else {
+				cout << migong[n][x+i][y+j];
+			}
+			
+		}
+		cout << '\n';
+	}
+	cout << x << " " << y;
+	cout << flush;
+	return ;
+}
